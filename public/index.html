@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        td {padding:5px;}
+        button{margin: 5px;}
+        </style>
+        </head>
+        <body>
+            <h2>Список пользователей</h2>
+            <div>
+                <input type="hidden" id="userId" />
+                <p>
+                    Имя:<br/>
+                    <input id="userName" />
+                </p>
+                <p>
+                    Возраст:<br />
+                    <input id="userAge" type="number" />
+                </p>
+                 <p>
+                    <button id="saveBtn">Сохранить</button>
+                    <button id="resetBtn">Сбросить</button>
+                </p>
+            </div>
+            <table>
+                <thead><tr><th>Имя</th><th>Возраст</th><th></th></tr></thead>
+                <tbody>
+                </tbody>
+            </table>
+  
+    <script>
+        async function getUsers(){
+            const responce = await fetch("/api/users", {
+                method: "GET",
+                headers: {"Accept": "application/json"}
+            })
+        
+            if (responce.ok === true){
+                const users = await responce.json();
+                const rows = document.querySelector("tbody")
+                users.forEach(user => rows.append(row(user)));
+
+            }
+        }
+        // получение одного пользователя
+        async function getUser(id){
+            const responce = await fetch(`/api/users/${id}`,{
+                method: "GET",
+                headers: {"Accept": "application/json"}
+            })
+            if (responce.ok === true){
+                const user = await responce.json();
+                document.getElementById("userId").value = user.id
+                document.getElementById("userName").value = user.name
+                document.getElementById("userAge").value = user.age
+            } else {
+                const error = await responce.json();
+                console.log(error.message);
+            }   
+        }
+        // async function createUser(userName, userAge){
+        //     const responce = await fetch("/api/users", {
+        //         method: "POST",
+        //         headers: {"Accept": "application/json", "Content-Type": "application/json"},
+        //         body: JSON.stringify({
+        //             name: userName,
+        //             age: parseInt(userAge, 10)
+        //         })
+        //     });
+        //     if (responce.ok === true){
+        //         const user = await responce.json();
+        //         document.querySelector("tbody").append(row(user));
+        //     } else {
+        //         const error = await responce.json();
+        //         console.log(error.message);
+        //     }
+    //     async function editUser(userId, userName, userAge){
+    //         const responce = await fetch
+
+    //     }
+    //     }
+    //     function reser(){
+    //         document.getElementById("userId").value = 
+    //         document.getElementById("userName").value = 
+    //         document.getElementById("userAge").value = 
+    //     }
+    // </script>
+            
+    <!-- <div id="message"></div>
+    <p>
+        Введите имя: <br />
+        <input name="username" id="username" />
+    </p>
+    <p>
+        Введите возраст: <br />
+        <input type="number" id="userage" name="userage">
+    </p>
+    <button onclick="send()">Отправить</button>
+<script>
+    async function send(){
+        const username = document.getElementById("username").value;
+        const userage = document.getElementById("userage").value;
+        const responce = await fetch("/hello", {
+            method: "POST",
+            headers: {"Accept": "application/json", "Content-Type": "application/json"},
+            body: JSON.stringify([
+                { name: "Dvalin", age: 1000},
+                { name: "Argenta", age: 10000},
+                { name: "Gerant", age: 2023012}
+            ])
+        });
+        const data = await response.json();
+        console.log(data); -->
+        <!-- // if (responce.ok) {
+        //     const data = await responce.json();
+        //     document.getElementById("message").textContent = data.message;
+        // }
+        // else
+        //     console.log(responce);
+    } -->
+</script>
+</body>
+</html>

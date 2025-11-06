@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path, Body, status
+from fastapi import FastAPI, Path, Body, status, Header, Response
 from fastapi.responses import JSONResponse, HTMLResponse, FileResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -128,3 +128,22 @@ def delete_person(id):
 # @app.post("/hello")
 # def hello(people:list[Person]):
 #     return {"message": people}
+
+# Отправка заголовков
+@app.get("/")
+def root():
+    data = "Hello"
+    return Response(content=data, media_type="text/plain", headers={"Secret-Code" : "123459"})
+# Для примера в данном случае клиенту отправляется кастомный заголовок "Secret-Code" со значением "123459":
+@app.get("/")
+def root(response: Response):
+    response.headers["Secret-Code"] = "123459"
+    return {"message": "Hello"}
+# Данный атрибут фактически представляет словарь, где ключи - названия заголовков:
+# Получение заголовков
+
+@app.get("/")
+def root(user_agent: str = Header()):
+    return {"User-Agent": user_agent}
+# def root(secret_code: str | None = Header(default=None)):
+#     return {"Secret-Code": secret_code}
